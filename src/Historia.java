@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ public class Historia {
         this.bandyci=bandyci;
     }
     public void dodajWydarzenie(Wydarzenie wydarzenie){
+        System.out.println(wydarzenie.toString());
         wydarzenia.add(wydarzenie);
     }
     public boolean czyJestBandytą(Gracz pytek, Gracz podejrzany)
@@ -44,5 +46,14 @@ public class Historia {
         }
         return bilans;
     }
-
+    public List<Gracz> podejrzani(List<Gracz> gracze)
+    {
+        List<Gracz> podejrzani=new LinkedList<>();
+        for(Gracz gracz:gracze)
+        {
+            if(bilansSmierci(gracz)<0||strzalyDoSzeryfa(gracz)>0)
+                podejrzani.add(gracz);
+        }
+        return podejrzani;
+    }
 }

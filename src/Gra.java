@@ -15,6 +15,7 @@ public class Gra {
     private List<Gracz> gracze;
     private List<Bandyta> bandyci;
     private Strategia strategia;
+    public PulaAkcji pula(){ return pula;}
     public boolean dynamitWGrze(){return dynamitWGrze;}
     public Gra(List<Gracz> gracze,PulaAkcji pulaAkcji) {
         bandyci=new LinkedList<>();

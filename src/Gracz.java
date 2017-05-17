@@ -9,14 +9,50 @@ import static java.lang.Math.min;
  * Created by Miron on 16.05.2017.
  */
 public abstract class Gracz {
-
     private int zasieg=1;
-    private static Random r;
+    private static Random r=new Random();
     protected Gra gra;
-    private int maxZycie;
-    private int życie;
-    private Strategia strategia;
-    private List<Akcja> reka;
+    protected int maxZycie;
+    protected int zycie;
+    protected Strategia strategia;
+    protected List<Akcja> reka;
+    private  int nrGracza;
+    public abstract String frakcja();
+    public int nrGracza()
+
+    {
+        return nrGracza;
+    }
+    protected Gracz(Strategia strategia)
+    {
+        this.strategia=strategia;
+        this.maxZycie=r.nextInt(1)+3;
+        this.zycie=maxZycie;
+        strategia.ustalGracza(this);
+    }
+
+
+    private void umrzyj(){
+        for(Akcja akcja:reka)
+            gra().pula().dodajZagrana(akcja);
+    }
+
+    public int zycie() {
+        return zycie;
+    }
+
+    protected List<Gracz> graczeDoSzeryfa()
+    {
+        List<Gracz> graczeDoSzeryfa=new LinkedList<>();
+        for(Gracz sasiad:gra().gracze())
+        {
+            graczeDoSzeryfa.add(sasiad);
+            if(sasiad.jestSzeryfem())
+                break;
+        }
+        return graczeDoSzeryfa;
+    }
+
     public List<Gracz> osobyWZasiegu()
     {
         List<Gracz> res=new LinkedList<>();
@@ -28,25 +64,33 @@ public abstract class Gracz {
         }
         return res;
     }
+
     public int otrzymaneObrazenia()
     {
-        return (maxZycie-życie);
+        return (maxZycie- zycie);
     }
+
     public boolean jestSzeryfem()
     {
         return false;
     }
+
     public void zwiekszZasieg(int oIle)
     {
         zasieg+=oIle;
     }
+
     public void ulecz(){
-        życie=min(życie+1,maxZycie);
+        zycie =min(zycie +1,maxZycie);
     }
+
     public void otrzymajObrażenia(int obrazenia)
     {
-        życie=max(0,życie-obrazenia);
+        zycie =max(0, zycie -obrazenia);
+        if(żyje()==false)
+            umrzyj();
     }
+
     private void sprawdzDynamit()
     {
         if(gra.dynamitWGrze())
@@ -63,6 +107,8 @@ public abstract class Gracz {
         sprawdzDynamit();
         if(żyje())
         {
+            while(reka.size()<5)
+                reka.add(gra().pula().dobierz());
             Wydarzenie ruch=strategia.planuj(reka);
             while(ruch!=null)
             {
@@ -74,21 +120,26 @@ public abstract class Gracz {
     }
     public boolean żyje()
     {
-        return życie>0;
+        return zycie >0;
     }
+
     public void ustawGrę(Gra gra)
     {
         this.gra=gra;
     }
+
     public Gra gra(){
         return gra;
     }
+
     public Gracz lewy()
     {
         return gra.gracze().get(gra.gracze().size()-1);
     }
+
     public Gracz prawy()
     {
         return gra.gracze().get(0);
     }
+
 }

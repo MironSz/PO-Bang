@@ -27,4 +27,11 @@ public class Wydarzenie {
         this.naKim=naKim;
         this.umarł=umarł;
     }
+    public String toString()
+    {
+        if(naKim!=null)
+            return "           "+akcja.toString()+" "+kto.toString();
+        else
+            return "           "+akcja.toString();
+    }
 }

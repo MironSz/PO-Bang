@@ -14,6 +14,8 @@ public class PulaAkcji {
     private boolean dynamit;
     public Akcja dobierz()
     {
+        if(dek.isEmpty())
+            tosuj();
         Akcja akcja=dek.get(0);
         dek.remove(akcja);
         return akcja;

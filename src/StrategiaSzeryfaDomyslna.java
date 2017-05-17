@@ -5,11 +5,8 @@ import java.util.List;
  * Created by Miron on 16.05.2017.
  */
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa{
-    public Wydarzenie planuj(List<Akcja> reka)
+    protected Wydarzenie strzela(List<Akcja> reka)
     {
-        Wydarzenie res=super.planuj((reka));
-        if(res!=null)
-            return res;
         if(reka.contains(Akcja.STRZEL)) {
             List<Gracz> osobyWZasiegu = gracz.osobyWZasiegu();
             Collections.shuffle(osobyWZasiegu);
@@ -23,4 +20,5 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa{
         else
             return null;
     }
+
 }

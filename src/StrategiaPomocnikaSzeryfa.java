@@ -14,4 +14,15 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia{
                 return new Wydarzenie(Akcja.ULECZ,gracz,gracz.prawy());
         return super.planuj(reka);
     }
+    protected boolean wartoRzucacDynamit()
+    {
+        int ilPodejrzanych;
+        List<Gracz> graczeDoSzeryfa=gracz.graczeDoSzeryfa();
+        if(graczeDoSzeryfa.size()>4)
+        {
+            if(3*gracz.gra().historia.podejrzani(graczeDoSzeryfa).size()>2*graczeDoSzeryfa.size())
+                return true;
+        }
+        return false;
+    }
 }
