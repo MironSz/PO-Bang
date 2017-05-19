@@ -1,3 +1,5 @@
+package DzikiZachod.StrukturyDanych;
+
 /**
  * Created by Miron on 16.05.2017.
  */

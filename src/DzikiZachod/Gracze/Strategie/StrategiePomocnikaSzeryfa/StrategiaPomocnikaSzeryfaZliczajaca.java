@@ -1,3 +1,9 @@
+package DzikiZachod.Gracze.Strategie.StrategiePomocnikaSzeryfa;
+
+import DzikiZachod.StrukturyDanych.Akcja;
+import DzikiZachod.Gracze.Gracz;
+import DzikiZachod.StrukturyDanych.Wydarzenie;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -11,7 +17,7 @@ public class StrategiaPomocnikaSzeryfaZliczajaca extends StrategiaPomocnikaSzery
         osobyWZasiegu=gracz.gra().historia.podejrzani(osobyWZasiegu);
         Collections.shuffle(osobyWZasiegu);
         if(osobyWZasiegu.isEmpty()==false)
-           return new Wydarzenie(Akcja.STRZEL,gracz,osobyWZasiegu.get(0));
+            return new Wydarzenie(Akcja.STRZEL,gracz,osobyWZasiegu.get(0));
         else
             return  null;
     }

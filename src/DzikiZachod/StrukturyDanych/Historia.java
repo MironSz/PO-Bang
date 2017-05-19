@@ -1,4 +1,8 @@
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+package DzikiZachod.StrukturyDanych;
+
+import DzikiZachod.Gracze.Gracz;
+import DzikiZachod.Gracze.Bandyta;
+import DzikiZachod.Gra;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,9 +14,9 @@ import java.util.List;
 public class Historia {
     private Gra gra;
     private List<Wydarzenie> wydarzenia;
-    private List<Wydarzenie> buforTury;
-    private List<Bandyta> bandyci;
+    private List<Gracz> graczePierwotni;
     private List<Gracz> gracze;
+    private List<Bandyta> bandyci;
     private Gracz poprzedniGracz;
 
     public void wybuchlDynamit(Gracz gracz)
@@ -20,17 +24,22 @@ public class Historia {
         System.out.println("Dynamit: WYBUCHŁ");
         gra.zmianaStanuDynamitu();
     }
-    public Historia(List<Bandyta> bandyci, List<Gracz> gracze,Gra gra)
+
+    public Historia(List<Bandyta> bandyci, List<Gracz> gracze, Gra gra)
     {
         this.gracze=gracze;
-        this.bandyci=bandyci;
+        this.bandyci = new LinkedList<>();
+        graczePierwotni = new LinkedList<>();
+        for (Bandyta bandyta : bandyci)
+            this.bandyci.add(bandyta);
+        //graczePierwotni=gracze;
+
+        for (Gracz gracz : gracze)
+            graczePierwotni.add(gracz);
         this.gra=gra;
         wydarzenia=new LinkedList<>();
-        buforTury=new LinkedList<>();
-        System.out.println("** START\n  Gracze:");
-        for(Gracz gracz:gracze)
-            System.out.println(gracz.nrGracza()+": "+gracz.frakcja()+" (liczba żyć: "+gracz.zycie()+")");
-        System.out.println("\n");
+
+        wypiszStanGraczy();
         poprzedniGracz=null;
     }
     private String tab(int n)
@@ -42,34 +51,50 @@ public class Historia {
     }
 
     public void dodajWydarzenie(Wydarzenie wydarzenie){
-       // buforTury.add(wydarzenie);
         wydarzenia.add(wydarzenie);
-        if(wydarzenie.kto!=poprzedniGracz)//rozpoczeła się jego tura
+        if (wydarzenie == null)///Wyświetl stan gry.
         {
-            wypiszMartwych(poprzedniGracz);
-            poprzedniGracz=wydarzenie.kto;
-            if(gra.dynamitWGrze())
-                System.out.println("Dynamit: PRZECHODZI DALEJ");
-            if(gracze.indexOf(wydarzenie.kto)==0)
+            wypiszStanGraczy();
+            wydarzenia.remove(null);
+        } else {
+            if (wydarzenie.kto != poprzedniGracz)//rozpoczeła się jego tura
             {
-                System.out.println("**TURA "+gra.nrTury());
+                if (wydarzenie.kto.jestSzeryfem())
+                    System.out.println("\n\n** TURA " + gra.nrTury());
+                wypiszMartwych(poprzedniGracz);
+                poprzedniGracz = wydarzenie.kto;
+                if (gra.dynamitWGrze())
+                    System.out.println("Dynamit: PRZECHODZI DALEJ");
+                System.out.println("\n" + tab(1) + "GRACZ " + wydarzenie.kto.nrGracza() + " (" + wydarzenie.kto.frakcja() + "):");
+                System.out.println(tab(2) + "AKCJE:" + wydarzenie.kto.wypiszReke() + "\n" + tab(2) + "RUCHY:");
             }
-            System.out.println(tab(1)+"GRACZ "+wydarzenie.kto.nrGracza()+" ("+wydarzenie.kto.frakcja()+"):");
-            System.out.println(tab(2)+"AKCJE:"+wydarzenie.kto.wypiszReke()+"\n"+tab(2)+"RUCHY:");
+            System.out.println(tab(3) + wydarzenie.toString());
         }
-        System.out.println(tab(3)+wydarzenie.toString());
+    }
 
+    private void wypiszStanGraczy() {
+        System.out.println(tab(1) + "\nGracze:");
+        for (int i = 1; i <= gracze.size() + 1; i++) {
+            for (Gracz gracz : graczePierwotni) {
+                if (gracz.nrGracza() == i) {
+                    System.out.println(gracz.nrGracza() + " " + gracz.frakcja() + " (liczba żyć: " + gracz.zycie() + ")");
+                    break;
+                }
+            }
+        }
     }
     public void zakonczGre()
     {
         boolean bandyciZyja=false;
         boolean szeryfZyje=false;
-        for(Gracz gracz:gracze) {
+        for (Gracz gracz : graczePierwotni) {
             if (gracz.zyje()) {
-                szeryfZyje = szeryfZyje || gracz.jestSzeryfem();
-                bandyciZyja = bandyciZyja || bandyci.contains(gracz);
+                //System.out.println("Żyje:" + gracz.frakcja());
+                if (gracz.jestSzeryfem())
+                    szeryfZyje = true;
+                if (bandyci.contains(gracz))
+                    bandyciZyja = true;
             }
-
         }
         if(szeryfZyje&&bandyciZyja)
         {
@@ -77,7 +102,7 @@ public class Historia {
         }
         else if (szeryfZyje)
         {
-            System.out.println("WYFRNANA STRONA: SZERYF i POMOCNICY");
+            System.out.println("WYGRANA STRONA: SZERYF I POMOCNICY");
         }
         else if(bandyciZyja)
         {
@@ -139,7 +164,7 @@ public class Historia {
             }
             else if(drukuj==true&&gracz.zyje()==false)
             {
-                System.out.println("GRACZ "+gracz.nrGracza()+" ("+gracz.frakcja()+")\n"+tab(1)+"MARTWY");
+                System.out.println("\n" + tab(1) + "GRACZ " + gracz.nrGracza() + " (" + gracz.frakcja() + ")\n" + tab(2) + "<MARTWY>");
             }
         }
     }

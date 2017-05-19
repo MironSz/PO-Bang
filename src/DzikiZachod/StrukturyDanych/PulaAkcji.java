@@ -1,4 +1,5 @@
-import java.lang.reflect.AccessibleObject;
+package DzikiZachod.StrukturyDanych;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

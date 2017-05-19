@@ -1,3 +1,9 @@
+package DzikiZachod.Gracze.Strategie.StrategieSzeryfa;
+
+import DzikiZachod.StrukturyDanych.Akcja;
+import DzikiZachod.Gracze.Gracz;
+import DzikiZachod.StrukturyDanych.Wydarzenie;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -5,8 +11,7 @@ import java.util.List;
  * Created by Miron on 16.05.2017.
  */
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa{
-    protected Wydarzenie strzela(List<Akcja> reka)
-    {
+    protected Wydarzenie strzela(List<Akcja> reka) {
 
         List<Gracz> osobyWZasiegu = gracz.osobyWZasiegu();
         Collections.shuffle(osobyWZasiegu);
@@ -20,7 +25,6 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa{
         else
             return null;
     }
-
 
 
 }
