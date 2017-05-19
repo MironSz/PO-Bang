@@ -22,8 +22,7 @@ public class Historia {
     }
     public Historia(List<Bandyta> bandyci, List<Gracz> gracze,Gra gra)
     {
-        this.gracze=new LinkedList<>();
-        for(Gracz gracz:gracze) this.gracze.add(gracz);
+        this.gracze=gracze;
         this.bandyci=bandyci;
         this.gra=gra;
         wydarzenia=new LinkedList<>();
@@ -47,6 +46,7 @@ public class Historia {
         wydarzenia.add(wydarzenie);
         if(wydarzenie.kto!=poprzedniGracz)//rozpoczeła się jego tura
         {
+            wypiszMartwych(poprzedniGracz);
             poprzedniGracz=wydarzenie.kto;
             if(gra.dynamitWGrze())
                 System.out.println("Dynamit: PRZECHODZI DALEJ");
@@ -77,7 +77,7 @@ public class Historia {
         }
         else if (szeryfZyje)
         {
-            System.out.println("WYFRNANA STRONA: SZERYG i POMOCNICY");
+            System.out.println("WYFRNANA STRONA: SZERYF i POMOCNICY");
         }
         else if(bandyciZyja)
         {
@@ -113,7 +113,7 @@ public class Historia {
         int bilans=0;
         for(Wydarzenie wyd:wydarzenia)
         {
-            if(wyd.akcja==Akcja.STRZEL&&wyd.kto.jestSzeryfem()==true)
+            if(wyd.akcja==Akcja.STRZEL&&wyd.naKim.jestSzeryfem())
                 bilans++;
         }
         return bilans;
@@ -127,5 +127,20 @@ public class Historia {
                 podejrzani.add(gracz);
         }
         return podejrzani;
+    }
+    private void wypiszMartwych(Gracz poprzedniGracz)
+    {
+        boolean drukuj=false;
+        for(Gracz gracz:gracze)
+        {
+            if(gracz==poprzedniGracz)
+            {
+                drukuj=true;
+            }
+            else if(drukuj==true&&gracz.zyje()==false)
+            {
+                System.out.println("GRACZ "+gracz.nrGracza()+" ("+gracz.frakcja()+")\n"+tab(1)+"MARTWY");
+            }
+        }
     }
 }

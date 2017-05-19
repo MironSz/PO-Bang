@@ -17,7 +17,8 @@ public class Gra {
     private List<Gracz> wszyscyGRacze;
     private List<Bandyta> bandyci;
     private Strategia strategia;
-    private int nrTury=1;
+    private int nrTury=0;
+    private Gracz pierwszyGracz;
 
     public int nrTury() {   return nrTury;}
     public PulaAkcji pula(){ return pula;}
@@ -34,12 +35,15 @@ public class Gra {
 
         for(Gracz gracz:gracze)
         {
+            if(gracz.jestSzeryfem())
+                this.szeryf=(Szeryf)gracz;
             gracz.ustawGrę(this);
             gracz.setNrGracza(nr);
             nr++;
         }
         Collections.shuffle(this.gracze);
         wszyscyGRacze=gracze;
+        pierwszyGracz=gracze.get(0);
         historia=new Historia(bandyci,gracze,this);
 
         przeprowadzGrę();
@@ -59,16 +63,26 @@ public class Gra {
     {
         while(szeryf.zyje()&&bandyci.isEmpty()==false&&nrTury<=42)
         {
-            obecnyGracz=gracze.get(0);
-            gracze.remove(0);
 
+
+               /* for(Gracz gracz:gracze)
+                {
+                    System.out.println("GRacz "+gracz.nrGracza()+" "+gracz.frakcja()+" zyje: "+gracz.zyje());
+                }*/
+
+
+            obecnyGracz=gracze.get(0);
+            //System.out.println("GRA gracz "+obecnyGracz.nrGracza()+obecnyGracz.zyje());
+            gracze.remove(0);
+            if(obecnyGracz==pierwszyGracz)
+                nrTury++;
             if(obecnyGracz.zyje())
                 obecnyGracz.zagrajTure();
 
-            if(obecnyGracz.zyje())
-                gracze.add(gracze.size(),obecnyGracz);
-           /* else if(bandyci.contains(obecnyGracz))
-                bandyci.remove(obecnyGracz);*/
+
+            gracze.add(gracze.size(),obecnyGracz);
+             if(bandyci.contains(obecnyGracz))
+                bandyci.remove(obecnyGracz);
 
 
         }
@@ -101,7 +115,7 @@ public class Gra {
             wydarzenie.naKim.otrzymajObrażenia(1);
             if(wydarzenie.naKim.zyje()==false)
             {
-                gracze.remove(wydarzenie.naKim);
+                wydarzenie.naKim.umrzyj();
             }
         }
         else ;//throw exception

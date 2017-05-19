@@ -10,7 +10,7 @@ public class Wydarzenie {
     {
         String res=akcja.toString();
         if(naKim!=null)
-            res=res+" "+naKim.nrGracza()+" "+kto.nrGracza()+kto.wypiszReke();
+            res=res+" "+naKim.nrGracza();
         return res;
     }
     public Wydarzenie(Akcja akcja,Gracz kto)

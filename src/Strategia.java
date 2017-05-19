@@ -25,13 +25,9 @@ public abstract class Strategia {
     public Wydarzenie planuj(List<Akcja> reka)
     {
         //System.out.println("Gracz "+gracz.nrGracza()+"posiada ulecz:"+ reka.contains(Akcja.ULECZ));
-        if(reka.contains(Akcja.ULECZ))
+        if(reka.contains(Akcja.ULECZ)&&gracz.otrzymaneObrazenia()!=0)
         {
-            //System.out.println("Ulecz");
-            if(gracz.otrzymaneObrazenia()!=0)
-            {
-                return new Wydarzenie(Akcja.ULECZ,gracz,gracz);
-            }
+            return new Wydarzenie(Akcja.ULECZ,gracz,gracz);
         }
         else if(reka.contains(Akcja.ZASIEG_PLUS_DWA))
         {
@@ -49,6 +45,7 @@ public abstract class Strategia {
         {
             return new Wydarzenie(Akcja.DYNAMIT,gracz);
         }
-        return null;
+        else
+            return null;
     }
 }

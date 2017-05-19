@@ -39,7 +39,7 @@ public abstract class Gracz {
         return pierwotnaReka.toString();
     }
 
-    private void umrzyj(){
+    public void umrzyj(){
         for(Akcja akcja:reka)
             gra().pula().dodajZagrana(akcja);
     }
@@ -53,7 +53,8 @@ public abstract class Gracz {
         List<Gracz> graczeDoSzeryfa=new LinkedList<>();
         for(Gracz sasiad:gra().gracze())
         {
-            graczeDoSzeryfa.add(sasiad);
+            if(sasiad.zyje())
+                graczeDoSzeryfa.add(sasiad);
             if(sasiad.jestSzeryfem())
                 break;
         }
@@ -64,12 +65,30 @@ public abstract class Gracz {
     {
         List<Gracz> res=new LinkedList<>();
         int i,j;
+        for(i=0,j=0;i<zasieg&&j< gra().gracze().size();j++)
+        {
+            if(gra().gracze().get(j).zyje())
+            {
+                i++;
+                res.add(gra().gracze().get(j));
+            }
+        }
+        for(i=0,j=gra().gracze().size()-1;i<zasieg&&j<gra().gracze().size();j--)
+        {
+            if(gra().gracze().get(j).zyje())
+            {
+                i++;
+                res.add(gra().gracze().get(j));
+            }
+        }
+        return res;
+        /*
         for(i=0,j=gra.gracze().size()-1; (i < zasieg)&& (i<=j); i++) {
             res.add(gra.gracze().get(i));
             if (i != j)
                 res.add(gra.gracze().get(j));
         }
-        return res;
+        return res;*/
     }
 
     public int otrzymaneObrazenia()
@@ -88,7 +107,10 @@ public abstract class Gracz {
     }
 
     public void ulecz(){
-        zycie =min(zycie +1,maxZycie);
+        if(zyje())
+            zycie =min(zycie +1,maxZycie);
+        else
+            System.out.println("ERROR: LECZE TRUPA");
     }
 
     public void otrzymajObrażenia(int obrazenia)
@@ -116,12 +138,15 @@ public abstract class Gracz {
         {
             while(reka.size()<5)
                 reka.add(gra().pula().dobierz());
+
            // pierwotnaReka=new LinkedList<>();
-           // pierwotnaReka=(LinkedList<Akcja>)reka.clone();
+            pierwotnaReka=(LinkedList<Akcja>)reka.clone();
+            //System.out.println("gracz"+wypiszReke());
            // for(Akcja akcja:reka) {
            //     pierwotnaReka.add(akcja);
           //  }
             Wydarzenie ruch=strategia.planuj(reka);
+           // System.out.println(ruch);
             while(ruch!=null)
             {
                 gra.zagraj(ruch);
@@ -146,12 +171,20 @@ public abstract class Gracz {
 
     public Gracz lewy()
     {
-        return gra.gracze().get(gra.gracze().size()-1);
+        for(int i=gra().gracze().size()-1;i>=0;i--)
+            if(gra().gracze().get(i).zyje())
+                return gra().gracze().get(i);
+        System.out.println("funkcja lewy nie działa");
+        return null;
     }
 
     public Gracz prawy()
     {
-        return gra.gracze().get(0);
+        for(int i=0;i<=gra().gracze().size()-1;i++)
+            if(gra().gracze().get(i).zyje())
+                return gra().gracze().get(i);
+        System.out.println("funkcja prawy nie działa");
+        return null;
     }
 
 }
