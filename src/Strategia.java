@@ -24,20 +24,22 @@ public abstract class Strategia {
     }
     public Wydarzenie planuj(List<Akcja> reka)
     {
-        if(reka.contains(reka.contains(Akcja.ULECZ)))
+        //System.out.println("Gracz "+gracz.nrGracza()+"posiada ulecz:"+ reka.contains(Akcja.ULECZ));
+        if(reka.contains(Akcja.ULECZ))
         {
+            //System.out.println("Ulecz");
             if(gracz.otrzymaneObrazenia()!=0)
             {
                 return new Wydarzenie(Akcja.ULECZ,gracz,gracz);
             }
         }
-        else if(reka.contains(reka.contains(Akcja.ZASIEG_PLUS_DWA)))
+        else if(reka.contains(Akcja.ZASIEG_PLUS_DWA))
         {
             return new Wydarzenie(Akcja.ZASIEG_PLUS_DWA,gracz,gracz);
         }
-        else if(reka.contains(reka.contains(Akcja.ZASIEG_PLUSJ_JEDEN)))
+        else if(reka.contains(Akcja.ZASIEG_PLUS_JEDEN))
         {
-            return new Wydarzenie(Akcja.ZASIEG_PLUSJ_JEDEN,gracz,gracz);
+            return new Wydarzenie(Akcja.ZASIEG_PLUS_JEDEN,gracz,gracz);
         }
         else if(reka.contains(Akcja.STRZEL)&&strzela(reka)!=null)
         {

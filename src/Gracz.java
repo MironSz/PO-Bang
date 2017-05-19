@@ -15,7 +15,8 @@ public abstract class Gracz {
     protected int maxZycie;
     protected int zycie;
     protected Strategia strategia;
-    protected List<Akcja> reka;
+    protected LinkedList<Akcja> reka;
+    private LinkedList<Akcja> pierwotnaReka;
     private  int nrGracza;
     public abstract String frakcja();
     public int nrGracza()
@@ -23,14 +24,20 @@ public abstract class Gracz {
     {
         return nrGracza;
     }
+    public void setNrGracza(int nr){ nrGracza=nr;}
     protected Gracz(Strategia strategia)
     {
+        this.reka=new LinkedList<>();
+        this.pierwotnaReka=new LinkedList<>();
         this.strategia=strategia;
-        this.maxZycie=r.nextInt(1)+3;
+        this.maxZycie=r.nextInt(2)+3;
         this.zycie=maxZycie;
         strategia.ustalGracza(this);
     }
-
+    public String wypiszReke()
+    {
+        return pierwotnaReka.toString();
+    }
 
     private void umrzyj(){
         for(Akcja akcja:reka)
@@ -87,7 +94,7 @@ public abstract class Gracz {
     public void otrzymajObrażenia(int obrazenia)
     {
         zycie =max(0, zycie -obrazenia);
-        if(żyje()==false)
+        if(zyje()==false)
             umrzyj();
     }
 
@@ -98,17 +105,22 @@ public abstract class Gracz {
             if(r.nextInt(6)+1==1)//wybuchł
             {
                 otrzymajObrażenia(3);
-                gra.zmianaStanuDynamitu();
+                gra().historia.wybuchlDynamit(this);
             }
         }
     }
     public void zagrajTure()
     {
         sprawdzDynamit();
-        if(żyje())
+        if(zyje())
         {
             while(reka.size()<5)
                 reka.add(gra().pula().dobierz());
+           // pierwotnaReka=new LinkedList<>();
+           // pierwotnaReka=(LinkedList<Akcja>)reka.clone();
+           // for(Akcja akcja:reka) {
+           //     pierwotnaReka.add(akcja);
+          //  }
             Wydarzenie ruch=strategia.planuj(reka);
             while(ruch!=null)
             {
@@ -118,7 +130,7 @@ public abstract class Gracz {
             }
         }
     }
-    public boolean żyje()
+    public boolean zyje()
     {
         return zycie >0;
     }

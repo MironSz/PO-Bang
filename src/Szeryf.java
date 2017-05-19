@@ -10,7 +10,7 @@ public class Szeryf extends Gracz{
     }
     public Szeryf()
     {
-        super(new StrategiaSzeryfaDomyslna());
+        this(new StrategiaSzeryfaDomyslna());
     }
     public void ustawGrę(Gra gra)
     {

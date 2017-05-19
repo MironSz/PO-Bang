@@ -12,6 +12,12 @@ public class PulaAkcji {
     private List<Akcja> dek;
     private List<Akcja> zagrane;
     private boolean dynamit;
+    public PulaAkcji()
+    {
+        this.pula=new LinkedList<>();
+        this.dek=new LinkedList<>();
+        this.zagrane=new LinkedList<>();
+    }
     public Akcja dobierz()
     {
         if(dek.isEmpty())
@@ -27,22 +33,10 @@ public class PulaAkcji {
     }
     public void dodaj(Akcja akcja, int ilosc)
     {
-        for(int i=0;i<ilosc;i++)
+        for(int i=0;i<ilosc;i++) {
             pula.add(akcja);
-    }
-
-    public PulaAkcji()
-    {
-        this.pula=new LinkedList<>();
-    }
-
-    public void przygotujDoRozgrywki()
-    {
-        zagrane=new LinkedList<>();
-        dek=new LinkedList<>();
-        for(Akcja akcja:pula)
-            dek.add(akcja);
-        Collections.shuffle(dek,new Random());
+            zagrane.add( akcja);
+        }
     }
 
     public void tosuj()

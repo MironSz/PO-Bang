@@ -7,18 +7,20 @@ import java.util.List;
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa{
     protected Wydarzenie strzela(List<Akcja> reka)
     {
-        if(reka.contains(Akcja.STRZEL)) {
-            List<Gracz> osobyWZasiegu = gracz.osobyWZasiegu();
-            Collections.shuffle(osobyWZasiegu);
-            for (Gracz sasiad : osobyWZasiegu) {
-                if (gracz.gra().historia.strzalyDoSzeryfa(sasiad) > 0) {
-                    return new Wydarzenie(Akcja.STRZEL,gracz,sasiad);
-                }
+
+        List<Gracz> osobyWZasiegu = gracz.osobyWZasiegu();
+        Collections.shuffle(osobyWZasiegu);
+        for (Gracz sasiad : osobyWZasiegu) {
+            if (gracz.gra().historia.strzalyDoSzeryfa(sasiad) > 0) {
+                return new Wydarzenie(Akcja.STRZEL,gracz,sasiad);
             }
-            return new Wydarzenie(Akcja.STRZEL,gracz,osobyWZasiegu.get(0));
         }
+        if(osobyWZasiegu.isEmpty()==false)
+            return new Wydarzenie(Akcja.STRZEL,gracz,osobyWZasiegu.get(0));
         else
             return null;
     }
+
+
 
 }

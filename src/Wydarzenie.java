@@ -6,6 +6,13 @@ public class Wydarzenie {
     public final Gracz naKim;
     public final Gracz kto;
     public final boolean umarł;
+    public String toString()
+    {
+        String res=akcja.toString();
+        if(naKim!=null)
+            res=res+" "+naKim.nrGracza()+" "+kto.nrGracza()+kto.wypiszReke();
+        return res;
+    }
     public Wydarzenie(Akcja akcja,Gracz kto)
     {
         this.akcja=akcja;
@@ -27,11 +34,5 @@ public class Wydarzenie {
         this.naKim=naKim;
         this.umarł=umarł;
     }
-    public String toString()
-    {
-        if(naKim!=null)
-            return "           "+akcja.toString()+" "+kto.toString();
-        else
-            return "           "+akcja.toString();
-    }
+
 }

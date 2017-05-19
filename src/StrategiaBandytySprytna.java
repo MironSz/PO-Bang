@@ -17,9 +17,9 @@ public class StrategiaBandytySprytna extends StrategiaBandyty{
     {
         if(super.strzela(reka)!=null)
             return super.strzela(reka);
-        if(ofiarnyBandyta!=null&&ofiarnyBandyta.żyje()==false)
+        if(ofiarnyBandyta!=null&&ofiarnyBandyta.zyje()==false)
             return strategiaBandytyDomyslna.planuj(reka);
-        if(ofiarnyBandyta!=null&&ofiarnyBandyta.żyje())
+        if(ofiarnyBandyta!=null&&ofiarnyBandyta.zyje())
             return new Wydarzenie(Akcja.STRZEL,gracz,ofiarnyBandyta);
         List<Gracz> osobyWZasiegu=gracz.osobyWZasiegu();
         for(Gracz sasiad:osobyWZasiegu)
