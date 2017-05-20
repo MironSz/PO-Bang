@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Miron on 16.05.2017.
  */
 public class Bandyta extends Gracz {
-    protected List<Bandyta> bandyci;
+    private List<Bandyta> bandyci;
 
     public Bandyta(StrategiaBandyty strategiaBandyty) {
         super(strategiaBandyty);
@@ -26,6 +26,6 @@ public class Bandyta extends Gracz {
     }
 
     public String frakcja() {
-        return "DzikiZachod.Gracze.Bandyta";
+        return "Bandyta";
     }
 }

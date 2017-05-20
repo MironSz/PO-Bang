@@ -16,19 +16,20 @@ public class StrategiaBandytySprytna extends StrategiaBandyty{
 
     public void ustalGracza(Gracz gracz) {
         super.ustalGracza(gracz);
+        strategiaBandytyDomyslna = new StrategiaBandytyDomyslna();
         strategiaBandytyDomyslna.ustalGracza(gracz);
     }
 
     protected Wydarzenie strzela(List<Akcja> reka) {
         if(super.strzela(reka)!=null)
             return super.strzela(reka);
-        if(ofiarnyBandyta!=null&&ofiarnyBandyta.zyje()==false)
+        if (ofiarnyBandyta != null && ofiarnyBandyta.zyje() == false)
             return strategiaBandytyDomyslna.planuj(reka);
-        if(ofiarnyBandyta!=null&&ofiarnyBandyta.zyje())
+        if (ofiarnyBandyta != null && ofiarnyBandyta.zyje())
             return new Wydarzenie(Akcja.STRZEL,gracz,ofiarnyBandyta);
         List<Gracz> osobyWZasiegu=gracz.osobyWZasiegu();
         for(Gracz sasiad:osobyWZasiegu) {
-            if(gracz.gra().historia.czyJestBandytą(gracz,sasiad)&&strzalyWRece(reka)>=sasiad.zycie()) {
+            if (gracz.gra().historia().czyJestBandytą(gracz, sasiad) && strzalyWRece(reka) >= sasiad.zycie()) {
                 ofiarnyBandyta=(Bandyta)sasiad;
                 return new Wydarzenie(Akcja.STRZEL,gracz,sasiad);
             }

@@ -16,7 +16,7 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty{
         List<Gracz> osobyWZasiegu=gracz.osobyWZasiegu();
 
         for(Gracz sasiad:osobyWZasiegu)
-            if(gracz.gra().historia.czyJestBandytą(gracz,sasiad)==false)
+            if (gracz.gra().historia().czyJestBandytą(gracz, sasiad) == false)
                 return new Wydarzenie(Akcja.STRZEL,gracz,sasiad);
 
         return null;

@@ -12,15 +12,27 @@ import java.util.List;
 public abstract class Strategia {
     protected Gracz gracz;
 
+    /*
+        Funkcja zwracająca, czy graczowi warto rzucić dynamit.
+     */
     protected abstract boolean wartoRzucacDynamit();
 
+    /*
+        Funkcja zwracająca czy i do kogo strzela gracz.
+        Funkcja zwraca Wydarzenie.
+     */
     protected abstract Wydarzenie strzela(List<Akcja> reka);
 
-
+    /*
+        Ustala czyją strategią jest dana strategia.
+     */
     public void ustalGracza(Gracz gracz) {
         this.gracz=gracz;
     }
 
+    /*
+        Zwraca ile strzałów na ręce posiada gracz.
+     */
     protected int strzalyWRece(List<Akcja> reka) {
         int wyn=0;
         for(Akcja akcja:reka)
@@ -29,6 +41,10 @@ public abstract class Strategia {
         return wyn;
     }
 
+    /*
+        Funkcja odpowiedzialna za znalezienie akcji i ewentualnego celu,
+        zgodnie z strategią. Funkcja zwraca Wydarzenie.
+     */
     public Wydarzenie planuj(List<Akcja> reka) {
         //System.out.println("DzikiZachod.Gracze.Gracz "+gracz.nrGracza()+"posiada ulecz:"+ reka.contains(DzikiZachod.StrukturyDanych.Akcja.ULECZ));
         if(reka.contains(Akcja.ULECZ)&&gracz.otrzymaneObrazenia()!=0) {

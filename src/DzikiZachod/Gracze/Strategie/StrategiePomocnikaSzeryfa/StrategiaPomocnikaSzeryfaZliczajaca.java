@@ -14,7 +14,7 @@ public class StrategiaPomocnikaSzeryfaZliczajaca extends StrategiaPomocnikaSzery
     protected Wydarzenie strzela(List<Akcja> reka){
 
         List<Gracz> osobyWZasiegu=gracz.osobyWZasiegu();
-        osobyWZasiegu=gracz.gra().historia.podejrzani(osobyWZasiegu);
+        osobyWZasiegu = gracz.gra().historia().podejrzani(osobyWZasiegu);
         Collections.shuffle(osobyWZasiegu);
         if(osobyWZasiegu.isEmpty()==false)
             return new Wydarzenie(Akcja.STRZEL,gracz,osobyWZasiegu.get(0));

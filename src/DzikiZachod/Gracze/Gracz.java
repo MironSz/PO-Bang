@@ -17,26 +17,38 @@ import static java.lang.Math.min;
  */
 public abstract class Gracz {
     private int zasieg=1;
-    private static Random r=new Random();
-    protected Gra gra;
-    protected int maxZycie;
-    protected int zycie;
-    protected Strategia strategia;
-    protected LinkedList<Akcja> reka;
+    private static final Random r = new Random();
+    Gra gra;
+    int maxZycie;
+    int zycie;
+    private final Strategia strategia;
+    private final LinkedList<Akcja> reka;
     private LinkedList<Akcja> pierwotnaReka;
     private  int nrGracza;
 
+    /*
+        Zwraca stringa z frakcją gracza.
+     */
     public abstract String frakcja();
 
+    /*
+        Zwraca numer gracz w rozgrywce.
+     */
     public int nrGracza()
 
     {
         return nrGracza;
     }
 
+    /*
+        Ustawia graczowi jego numer w rozgrywce.
+     */
     public void setNrGracza(int nr){ nrGracza=nr;}
 
-    protected Gracz(Strategia strategia) {
+    /*
+        Konstruktor gracza przyjmujący za parametr strategię.
+     */
+    Gracz(Strategia strategia) {
         this.reka=new LinkedList<>();
         this.pierwotnaReka=new LinkedList<>();
         this.strategia=strategia;
@@ -45,19 +57,31 @@ public abstract class Gracz {
         strategia.ustalGracza(this);
     }
 
+    /*
+        Zwraca stringa, listę akcji na ręce.
+     */
     public String wypiszReke() {
         return pierwotnaReka.toString();
     }
 
+    /*
+        Funkcja odpowiada za wszystkie akcje powiązane ze śmiercią gracza.
+     */
     public void umrzyj(){
         for(Akcja akcja:reka)
             gra().pula().dodajZagrana(akcja);
     }
 
+    /*
+        Zwraca obecny stan życia.
+     */
     public int zycie() {
         return zycie;
     }
 
+    /*
+        Zwraca listę osób pomiędzy obecnym graczem a szeryfem.
+     */
     public List<Gracz> graczeDoSzeryfa() {
         List<Gracz> graczeDoSzeryfa=new LinkedList<>();
         for(Gracz sasiad:gra().gracze()) {
@@ -69,6 +93,9 @@ public abstract class Gracz {
         return graczeDoSzeryfa;
     }
 
+    /*
+        Zwraca listę osób do ktorych gracz może strzelić.
+     */
     public List<Gracz> osobyWZasiegu() {
         List<Gracz> res=new LinkedList<>();
         int i,j;
@@ -85,27 +112,33 @@ public abstract class Gracz {
             }
         }
         return res;
-        /*
-        for(i=0,j=gra.gracze().size()-1; (i < zasieg)&& (i<=j); i++) {
-            res.add(gra.gracze().get(i));
-            if (i != j)
-                res.add(gra.gracze().get(j));
-        }
-        return res;*/
     }
 
+    /*
+        Zwraca różnicę sumy otrzymanych obrażen i sumy uleczeń w grze.
+     */
     public int otrzymaneObrazenia() {
         return (maxZycie- zycie);
     }
 
+    /*
+        Zwraca czy gracz jest szeryfem.
+     */
     public boolean jestSzeryfem() {
         return false;
     }
 
+    /*
+        Funkcja odpowiada za zwiększenie zasięgu,
+        zasięg można zwiększać dowolnie wiele razy.
+     */
     public void zwiekszZasieg(int oIle) {
         zasieg+=oIle;
     }
 
+    /*
+        Funkcja odpowiada za uleczenie gracza.
+     */
     public void ulecz(){
         if(zyje())
             zycie =min(zycie +1,maxZycie);
@@ -113,53 +146,90 @@ public abstract class Gracz {
             System.out.println("ERROR: LECZE TRUPA");
     }
 
-    public void otrzymajObrażenia(int obrazenia) {
+    /*
+        Funkcja odpowiada za przyjęcie obrażen
+        i ewentualną śmierć gracz.
+     */
+    public void otrzymajObrazenia(int obrazenia) {
         zycie =max(0, zycie -obrazenia);
-        if(zyje()==false)
+        if (!zyje())
             umrzyj();
     }
 
+    /*
+        Zwraca stan wiedzy o graczu.
+        Wszyscy wiedzą, że martwy bandyta jest bandytą.
+        Bandyci wiedzą, kto jest bandytą.
+        Gdy gracz nie zna frakcji podejrzanego, funkcja zwróci
+        false=> pytek dostanie informację, że podejrzany jest
+        pomocnikiem szeryfa. Nie użyta w implementacji, ale mogłaby
+        być użyteczna w dalszej rozbudowie programu
+     */
+    protected final boolean czyJestBandyta(Gracz podejrzany) {
+        return gra().historia().czyJestBandytą(this, podejrzany);
+    }
+
+    /*
+        Sprawdza czy dynamit wybucha.
+        Wykonuje wszystkie powiązane z ewentualnym
+        wybuchem operacje.
+     */
     private void sprawdzDynamit() {
         if(gra.dynamitWGrze()) {
             if(r.nextInt(6)+1==1)//wybuchł
             {
-                otrzymajObrażenia(3);
-                gra().historia.wybuchlDynamit(this);
+                otrzymajObrazenia(3);
+                gra().historia().wybuchlDynamit(this);
             }
         }
     }
 
+    /*
+        Wykonuje całą turę gracza.
+     */
     public void zagrajTure() {
         sprawdzDynamit();
         if(zyje()) {
             while(reka.size()<5)
-                reka.add(gra().pula().dobierz());
+                reka.add(gra().pula().dobierzAkcje());
 
             pierwotnaReka=(LinkedList<Akcja>)reka.clone();
 
             Wydarzenie ruch=strategia.planuj(reka);
 
             while(ruch!=null) {
-                gra.zagraj(ruch);
+                gra.zagrajAkcje(ruch);
                 reka.remove(ruch.akcja);
                 ruch=strategia.planuj(reka);
             }
-            gra.zagraj(null);
+            gra.zagrajAkcje(null);
         }
     }
 
+    /*
+        Zwraca czy gracz żyje w obecnym momencie gry.
+     */
     public boolean zyje() {
         return zycie >0;
     }
 
+    /*
+        Zapisuje w której grze bierze gracz udział.
+     */
     public void ustawGrę(Gra gra) {
         this.gra=gra;
     }
 
+    /*
+        Zwraca w którą grę gracz gra.
+    */
     public Gra gra(){
         return gra;
     }
 
+    /*
+        Zwraca pierwszego żywego gracza po lewej.
+     */
     public Gracz lewy() {
         for(int i = gra().gracze().size()-1; i>=0; i--)
             if(gra().gracze().get(i).zyje())
@@ -168,6 +238,9 @@ public abstract class Gracz {
         return null;
     }
 
+    /*
+        Zwraca pierwszego żywego gracza po prawej.
+     */
     public Gracz prawy() {
         for(int i = 0; i<=gra().gracze().size()-1; i++)
             if(gra().gracze().get(i).zyje())

@@ -9,41 +9,56 @@ import java.util.Random;
  * Created by Miron on 16.05.2017.
  */
 public class PulaAkcji {
-    private List<Akcja> pula;
+    private final List<Akcja> pula;
     private List<Akcja> dek;
-    private List<Akcja> zagrane;
+    private List<Akcja> stosOdrzuconych;
     private boolean dynamit;
     public PulaAkcji()
     {
         this.pula=new LinkedList<>();
         this.dek=new LinkedList<>();
-        this.zagrane=new LinkedList<>();
+        this.stosOdrzuconych = new LinkedList<>();
     }
-    public Akcja dobierz()
+
+    /*
+        Zwraca akcję ze deku kart. Gdy dek jest pusty,
+        przetosowuje stos odrzuconych kart.
+        Zakłada, że gra posiada dość kart dla wszystkich graczy.
+     */
+    public Akcja dobierzAkcje()
     {
         if(dek.isEmpty())
-            tosuj();
+            tosujStosOdrzuconych();
         Akcja akcja=dek.get(0);
         dek.remove(akcja);
         return akcja;
     }
-    public void dodajZagrana(Akcja akcja)
-    {
+
+    /*
+        Dodaje zagraną akcje do stosu odrzuconych kart.
+     */
+    public void dodajZagrana(Akcja akcja) {
         if(akcja!=Akcja.DYNAMIT)
-            zagrane.add(akcja);
+            stosOdrzuconych.add(akcja);
     }
-    public void dodaj(Akcja akcja, int ilosc)
-    {
-        for(int i=0;i<ilosc;i++) {
+
+    /*
+        Dodaje do puli nową akcję.
+     */
+    public void dodaj(Akcja akcja, int ilosc) {
+        for(int i = 0; i<ilosc; i++) {
             pula.add(akcja);
-            zagrane.add( akcja);
+            stosOdrzuconych.add(akcja);
         }
     }
 
-    public void tosuj()
+    /*
+        Tosuje odrzucone karty i dodaje je do deku.
+     */
+    private void tosujStosOdrzuconych()
     {
-        dek=zagrane;
-        zagrane=new LinkedList<>();
+        dek = stosOdrzuconych;
+        stosOdrzuconych = new LinkedList<>();
         Collections.shuffle(dek,new Random());
     }
 

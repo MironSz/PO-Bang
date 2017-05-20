@@ -16,27 +16,49 @@ import java.util.List;
  * Created by Miron on 16.05.2017.
  */
 public class Gra {
-
-    private int iloscBandytow;
     private Gracz obecnyGracz;
     private boolean dynamitWGrze;
     private Szeryf szeryf;
     private PulaAkcji pula;
-    public Historia historia;
+    private Historia historia;
     private List<Gracz> gracze;
-    private List<Gracz> wszyscyGracze;
     private List<Bandyta> bandyci;
     private int nrTury=0;
     private Gracz pierwszyGracz;
 
+    /*
+        Zwraca historię rozgrywki.
+     */
+    public Historia historia() {
+        return historia;
+    }
+
+    /*
+        Zwraca numer obecnej tury.
+     */
     public int nrTury() {   return nrTury;}
 
+    /*
+        Zwraca pulę akcji.
+     */
     public PulaAkcji pula(){ return pula;}
 
+    /*
+        Zwraca czy dynamit znajduje się obecnie na stole.
+     */
     public boolean dynamitWGrze(){  return dynamitWGrze;}
 
-    public void zmianaStanuDynamitu(){ dynamitWGrze=dynamitWGrze^true;}
+    /*
+        Wywoływana w trakcie zagrania lub wybuchu dynamitu.
+        Pamięta czy dynamit znajduje się obecnie w grze.
+     */
+    public void zmianaStanuDynamitu() {
+        dynamitWGrze = !dynamitWGrze;
+    }
 
+    /*
+        Funkcja odpowiedzialna za inicjację rozgrywki.
+     */
     public void rozgrywka(List<Gracz> gracze, PulaAkcji pulaAkcji) {
         int nr=1;
 
@@ -56,23 +78,29 @@ public class Gra {
             gracze.remove(0);
             gracze.add(pomoc);
         }
-        wszyscyGracze = gracze;
         pierwszyGracz=gracze.get(0);
         historia=new Historia(bandyci,gracze,this);
-        iloscBandytow = bandyci.size();
         przeprowadzGrę();
     }
 
+    /*
+        Funkcja wywoływana przez bandytę, gdy ten zgłasza się,
+        że jest bandytą. Dodaje bandytę do listy bandytów.
+     */
     public List<Bandyta> dodajBandytę(Bandyta bandyta) {
         bandyci.add(bandyta);
         return bandyci;
     }
 
+    /*
+        Zwraca gracza będącego szeryfem.
+     */
     public Szeryf szeryf(){ return szeryf;}
 
-    public void ustalSzeryfa(Szeryf szeryf){ this.szeryf=szeryf;}
-
-    public void przeprowadzGrę() {
+    /*
+       Przeprowadza grę.
+     */
+    private void przeprowadzGrę() {
         while (szeryf.zyje() && bandyci.size() > 0 && nrTury <= 42) {
             obecnyGracz=gracze.get(0);
             gracze.remove(0);
@@ -83,7 +111,7 @@ public class Gra {
 
 
             gracze.add(gracze.size(),obecnyGracz);
-            if (obecnyGracz.zyje() == false)
+            if (!obecnyGracz.zyje())
                 if (bandyci.contains(obecnyGracz))
                     bandyci.remove(obecnyGracz);
 
@@ -92,7 +120,11 @@ public class Gra {
         historia.zakonczGre();
     }
 
-    public void zagraj(Wydarzenie wydarzenie) {
+    /*
+        Funkcja wywoływana gdy gracz zagra akcję.
+        Odpowiada za obsługę tego.
+     */
+    public void zagrajAkcje(Wydarzenie wydarzenie) {
         historia.dodajWydarzenie(wydarzenie);
         if (wydarzenie != null) {
             pula.dodajZagrana(wydarzenie.akcja);
@@ -105,17 +137,20 @@ public class Gra {
             } else if (wydarzenie.akcja == Akcja.DYNAMIT) {
                 dynamitWGrze = true;
             } else if (wydarzenie.akcja == Akcja.STRZEL) {
-                wydarzenie.naKim.otrzymajObrażenia(1);
-                if (wydarzenie.naKim.zyje() == false) {
+                wydarzenie.naKim.otrzymajObrazenia(1);
+                if (!wydarzenie.naKim.zyje()) {
                     wydarzenie.naKim.umrzyj();
                 }
             }
         } else if (wydarzenie == null) {
 
         }
-        ;//throw exception
+        //throw exception
     }
 
+    /*
+        Zwraca listę graczy.
+     */
     public List<Gracz> gracze() {
         return gracze;
     }

@@ -4,6 +4,9 @@ import DzikiZachod.Gracze.Gracz;
 
 /**
  * Created by Miron on 16.05.2017.
+ * Klasa przechowująca zagrania graczy.
+ * Klasa przetrzymuje jaką akcję zagrał który
+ * gracz i ewentualnie na kim.
  */
 public class Wydarzenie {
     public final Akcja akcja;

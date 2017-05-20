@@ -16,7 +16,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa{
         List<Gracz> osobyWZasiegu = gracz.osobyWZasiegu();
         Collections.shuffle(osobyWZasiegu);
         for (Gracz sasiad : osobyWZasiegu) {
-            if (gracz.gra().historia.strzalyDoSzeryfa(sasiad) > 0) {
+            if (gracz.gra().historia().strzalyDoSzeryfa(sasiad) > 0) {
                 return new Wydarzenie(Akcja.STRZEL,gracz,sasiad);
             }
         }

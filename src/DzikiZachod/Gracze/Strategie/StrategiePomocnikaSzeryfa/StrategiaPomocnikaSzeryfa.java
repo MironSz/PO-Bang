@@ -25,7 +25,7 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
         int ilPodejrzanych;
         List<Gracz> graczeDoSzeryfa=gracz.graczeDoSzeryfa();
         if(graczeDoSzeryfa.size()>4) {
-            if (3 * gracz.gra().historia.podejrzani(graczeDoSzeryfa).size() >= 2 * graczeDoSzeryfa.size())
+            if (3 * gracz.gra().historia().podejrzani(graczeDoSzeryfa).size() >= 2 * graczeDoSzeryfa.size())
                 return true;
         }
         return false;

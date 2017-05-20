@@ -9,5 +9,5 @@ public enum Akcja {
     STRZEL,
     ZASIEG_PLUS_JEDEN,
     ZASIEG_PLUS_DWA,
-    DYNAMIT;
+    DYNAMIT
 }
