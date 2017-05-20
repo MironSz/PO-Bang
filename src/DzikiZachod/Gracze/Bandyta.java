@@ -20,6 +20,11 @@ public class Bandyta extends Gracz {
         super(new StrategiaBandytyDomyslna());
     }
 
+    public void umrzyj() {
+        super.umrzyj();
+        gra().usunBandyte(this);
+    }
+
     public void ustawGrę(Gra gra) {
         this.gra=gra;
         bandyci=gra.dodajBandytę(this);

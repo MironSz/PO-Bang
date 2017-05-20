@@ -93,33 +93,40 @@ public class Gra {
     }
 
     /*
+        Usuwa bandytę z listy bandytów, po jego śmierci.
+     */
+    public void usunBandyte(Gracz gracz) {
+        bandyci.remove(gracz);
+    }
+    /*
         Zwraca gracza będącego szeryfem.
      */
     public Szeryf szeryf(){ return szeryf;}
 
     /*
+        Zwraca czy gra dobiegła końca.
+     */
+    public boolean graDobieglaKonca() {
+        return !(bandyci.size() > 0 && szeryf.zyje() && nrTury < 42);
+    }
+    /*
        Przeprowadza grę.
      */
     private void przeprowadzGrę() {
-        while (szeryf.zyje() && bandyci.size() > 0 && nrTury <= 42) {
+        while (!graDobieglaKonca()) {
             obecnyGracz=gracze.get(0);
             gracze.remove(0);
+
             if(obecnyGracz==pierwszyGracz)
                 nrTury++;
+
             if(obecnyGracz.zyje())
                 obecnyGracz.zagrajTure();
 
-
             gracze.add(gracze.size(),obecnyGracz);
-            if (!obecnyGracz.zyje())
-                if (bandyci.contains(obecnyGracz))
-                    bandyci.remove(obecnyGracz);
-
-
         }
         historia.zakonczGre();
     }
-
     /*
         Funkcja wywoływana gdy gracz zagra akcję.
         Odpowiada za obsługę tego.

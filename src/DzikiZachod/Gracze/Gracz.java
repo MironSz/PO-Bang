@@ -157,7 +157,7 @@ public abstract class Gracz {
     }
 
     /*
-        Zwraca stan wiedzy o graczu.
+        Zwraca stan wiedzy o frakcji gracza.
         Wszyscy wiedzą, że martwy bandyta jest bandytą.
         Bandyci wiedzą, kto jest bandytą.
         Gdy gracz nie zna frakcji podejrzanego, funkcja zwróci
