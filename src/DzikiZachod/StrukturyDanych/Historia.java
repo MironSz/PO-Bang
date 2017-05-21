@@ -144,12 +144,14 @@ public class Historia {
         pomocnikiem szeryfa. Nie użyta w implementacji, ale mogłaby
         być użyteczna w dalszej rozbudowie programu
     */
-    public boolean czyJestBandytą(Gracz pytek, Gracz podejrzany) {
+    public boolean czyJestBandyta(Gracz pytek, Gracz podejrzany) {
         if (bandyci.contains(pytek) || !podejrzany.zyje())
             return bandyci.contains(podejrzany);
         return false;
     }
-
+    /*
+        Zwraca różnicę zabitych bandytów i pomocników przez gracza.
+     */
     private int bilansSmierci(Gracz kto)
     {
         int bilans=0;

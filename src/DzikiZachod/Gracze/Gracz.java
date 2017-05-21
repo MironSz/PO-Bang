@@ -165,8 +165,8 @@ public abstract class Gracz {
         pomocnikiem szeryfa. Nie użyta w implementacji, ale mogłaby
         być użyteczna w dalszej rozbudowie programu
      */
-    protected final boolean czyJestBandyta(Gracz podejrzany) {
-        return gra().historia().czyJestBandytą(this, podejrzany);
+    public final boolean czyJestBandyta(Gracz podejrzany) {
+        return gra().historia().czyJestBandyta(this, podejrzany);
     }
 
     /*

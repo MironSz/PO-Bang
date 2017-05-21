@@ -9,6 +9,9 @@ import java.util.List;
 
 /**
  * Created by Miron on 16.05.2017.
+ * Bandyta sprytny tylko raz zabija innego bandytę.
+ * Takie postępowanie wynika z treści, nie jest to jedyna
+ * interpetacja, ale jest poprawna.
  */
 public class StrategiaBandytySprytna extends StrategiaBandyty{
     private StrategiaBandytyDomyslna strategiaBandytyDomyslna;
@@ -23,13 +26,16 @@ public class StrategiaBandytySprytna extends StrategiaBandyty{
     protected Wydarzenie strzela(List<Akcja> reka) {
         if(super.strzela(reka)!=null)
             return super.strzela(reka);
+
         if (ofiarnyBandyta != null && ofiarnyBandyta.zyje() == false)
             return strategiaBandytyDomyslna.planuj(reka);
+
         if (ofiarnyBandyta != null && ofiarnyBandyta.zyje())
             return new Wydarzenie(Akcja.STRZEL,gracz,ofiarnyBandyta);
+
         List<Gracz> osobyWZasiegu=gracz.osobyWZasiegu();
         for(Gracz sasiad:osobyWZasiegu) {
-            if (gracz.gra().historia().czyJestBandytą(gracz, sasiad) && strzalyWRece(reka) >= sasiad.zycie()) {
+            if (gracz.czyJestBandyta(sasiad) && strzalyWRece(reka) >= sasiad.zycie()) {
                 ofiarnyBandyta=(Bandyta)sasiad;
                 return new Wydarzenie(Akcja.STRZEL,gracz,sasiad);
             }
